@@ -1,3 +1,5 @@
+# Product class
+
 class Product:
     def __init__(self, id, name,category_id,category_name,price,available_quantity,warning_quantity ): 
         self.id = id

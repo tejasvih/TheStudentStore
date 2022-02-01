@@ -1,3 +1,5 @@
+# Database handling class
+
 '''
 References:
 https://www.digitalocean.com/community/tutorials/how-to-use-the-sqlite3-module-in-python-3

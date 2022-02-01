@@ -1,126 +1,143 @@
-# import tkinter module 
+# Main admin management 
+
+from ctypes import alignment
 from tkinter import * 
 import tkinter as tk
-from db.categories import Categories
+from db.product import Product
 from db.products import Products
 from utils import center
 
-    
-def main():    
-    # creating main tkinter window/toplevel 
-    root = tk.Tk() 
-
-    #geometry() method is used to resize the Gui Window
-    root.geometry("350x350")
-    root.title('Admin')
-
-    center(root)
-    # Button() function is used to create button widgets
-    # categories = Button(root,text="Categories", command=showCategories)
-    # categories.grid(column=1,row=1,pady="10",padx=10)
-
-    products = Button(root,text="Products", command = showProducts)
-    products.grid(column=1,row=2,pady="10",padx=10)
-
-
-    mainloop() 
-
-
-
-def showCategories():
-    itemWindow = Toplevel()
-    itemWindow.geometry("250x250")
-    itemWindow.title("Categories")
-    itemWindow.grab_set()
-    center(itemWindow)
-    
-    storeLabelFrame = LabelFrame(itemWindow, text="Categories")
-    storeLabelFrame.pack(fill="both", expand="yes", padx="20", pady="10")
-
-    storeItemsFrame = Frame(storeLabelFrame)
-    storeItemsFrame.pack(padx="10", pady="5")
-    categories = Categories()
-    items = categories.list() 
-    for item in items:
-        itemFrame = Frame(storeItemsFrame,  pady="5")
-        itemFrame.pack(fill="both", expand="yes")
-
-        nameLabel = Label(itemFrame, text=item.name)
-        nameLabel.pack(side="left")
-    
-    
-    btnAdd = Button(itemWindow, text="Add", cursor="hand2")
-    btnAdd.pack(pady="6")
-    btnClose = Button(itemWindow, text="Close", command=itemWindow.destroy)
-    btnClose.pack(pady="6")
-    itemWindow.mainloop()
-    
-    
-def showProducts():
-    itemWindow = Toplevel()
-    itemWindow.geometry("450x450")
-    itemWindow.title("Products")
-    itemWindow.grab_set()
-    center(itemWindow)
-    
-    storeLabelFrame = LabelFrame(itemWindow, text="Products")
-    storeLabelFrame.pack(fill="both", expand="yes", padx="20", pady="10")
-
-    storeItemsFrame = Frame(storeLabelFrame)
-    storeItemsFrame.pack(padx="10", pady="5")
-    products = Products()
-    items = products.list() 
-    for item in items:
-        itemFrame = Frame(storeItemsFrame,  pady="5")
-        itemFrame.pack(fill="both", expand="yes")
-
-        nameLabel = Label(itemFrame, text=item.name)
-        priceLabel = Label(itemFrame, text="₹ %s"%item.price )  
+class admin_management():
+    def __init__(self):
+        self.showProducts()
+       
         
-        qtyLabel = Label(itemFrame, text=" Qty: %s"%item.available_quantity )  
-        warningQtyLabel = Label(itemFrame, text=" Warning Qty:  %s"%item.warning_quantity )  
+    def showProducts(self):
+        # productsWindow = Toplevel()
+        productsWindow = tk.Tk()
+        productsWindow.geometry("450x450")
+        productsWindow.title("Products")
+        productsWindow.grab_set()
+        center(productsWindow)
+        self.prodWindow = productsWindow
         
-        editBtn = Button(itemFrame, text="Edit", command=lambda i=item: showProducts(i) ) 
+        storeLabelFrame = LabelFrame(productsWindow, text="Products")
+        storeLabelFrame.pack(fill="both", expand="yes", padx="20", pady="10")
+
+        storeItemsFrame = Frame(storeLabelFrame)
+        storeItemsFrame.pack(padx="10", pady="5")
+        products = Products()
+        items = products.list() 
+        for item in items:
+            itemFrame = Frame(storeItemsFrame,  pady="5")
+            itemFrame.pack(fill="both", expand="yes")
+
+            nameLabel = Label(itemFrame, text=item.name,font=("Candara",12),fg="blue")
+            categoryLabel = Label(itemFrame, text=item.category_name,font=("Candara",8),fg="green")
+            priceLabel = Label(itemFrame, text="₹ %s"%item.price,font=("Candara",10),fg="red" )  
+            
+            qtyLabel = Label(itemFrame, text=" Qty: %s"%item.available_quantity,font=("Candara",10),fg="blue" )  
+            warningQtyLabel = Label(itemFrame, text=" Warning Qty:  %s"%item.warning_quantity,font=("Candara",10),fg="maroon" )  
+            
+            editBtn = Button(itemFrame, text="Edit", command=lambda i=item: self.addEditProduct(i) ) 
+            
+            # btnImage=PhotoImage(file="images/addToCart.png")       
+            # addToCartBtn.image= btnImage
+            # editBtn.config(image=btnImage,width="40",height="40")
+            
+            nameLabel.pack(side="left")
+            categoryLabel.pack(side="left")
+            priceLabel.pack(side="left",fill="both", expand="yes" )
+            qtyLabel.pack(side="left",fill="both", expand="yes" )
+            warningQtyLabel.pack(side="left",fill="both", expand="yes" )
+            editBtn.pack(side="right" )
         
-        # btnImage=PhotoImage(file="images/addToCart.png")       
-        # addToCartBtn.image= btnImage
-        # editBtn.config(image=btnImage,width="40",height="40")
+        actionFrame = Frame(productsWindow,  pady="1")
+        actionFrame.pack(fill="both", expand="yes")
+        btnAdd = Button(actionFrame, text="Add", width=10,command = lambda :self.addEditProduct(None))
+        btnAdd.pack(side="right",padx="6")
+        btnClose = Button(actionFrame, text="Close", width=10,command=productsWindow.destroy)
+        btnClose.pack(side="right",padx="6")
+        productsWindow.mainloop()    
         
-        nameLabel.pack(side="left")
-        priceLabel.pack(side="left",fill="both", expand="yes" )
-        qtyLabel.pack(side="left",fill="both", expand="yes" )
-        warningQtyLabel.pack(side="left",fill="both", expand="yes" )
-        editBtn.pack(side="right" )
+        
+    def addEditProduct(self,item : Product):    
+        itemWindow = Toplevel()
+        itemWindow.geometry("300x250")
+        itemWindow.title("Product")
+        itemWindow.grab_set()
+        center(itemWindow)
+        
     
-    
-    btnAdd = Button(itemWindow, text="Add", command = addProduct)
-    btnAdd.pack(pady="6")
-    btnClose = Button(itemWindow, text="Close", command=itemWindow.destroy)
-    btnClose.pack(pady="6")
-    itemWindow.mainloop()    
-    
-    
-def addProduct():    
-    itemWindow = Toplevel()
-    itemWindow.geometry("450x450")
-    itemWindow.title("Add Product")
-    itemWindow.grab_set()
-    center(itemWindow)
-    # Button() function is used to create button widgets
-    saveBtn = Button(itemWindow,text="Save", command=lambda : saveProduct(itemWindow))
-    saveBtn.grid(column=1,row=1,pady="10",padx=10)
+        l1 = Label(itemWindow, text = "Name")
+        l2 = Label(itemWindow, text = "Category Name") 
+        l3 = Label(itemWindow, text = "Price") 
+        l4 = Label(itemWindow, text = "Available Quantity") 
+        l5 = Label(itemWindow, text = "Warning Quantity") 
 
-    cancelBtn = Button(itemWindow,text="Cancel", command = itemWindow.destroy)
-    cancelBtn.grid(column=1,row=2,pady="10",padx=10)
+        # grid method to arrange labels in respective 
+        # rows and columns as specified 
+
+        l1.grid(row = 1, column = 1, pady = 10,padx=15) 
+        l2.grid(row = 2, column = 1, pady = 4,padx=15) 
+        l3.grid(row = 3, column = 1, pady = 4,padx=15) 
+        l4.grid(row = 4, column = 1, pady = 4,padx=15) 
+        l5.grid(row = 5, column = 1, pady = 4,padx=15) 
+
+        # entry widgets, used to take entry from user 
+        self.e1 = Entry(itemWindow) 
+        self.e2 = Entry(itemWindow) 
+        self.e3 = Entry(itemWindow) 
+        self.e4 = Entry(itemWindow) 
+        self.e5 = Entry(itemWindow) 
+        
+        if (item != None):
+            self.e1.insert(0, item.name)
+            self.e2.insert(0, item.category_name)
+            self.e3.insert(0, item.price)
+            self.e4.insert(0, item.available_quantity)
+            self.e5.insert(0, item.warning_quantity)
+            
+        # this will arrange entry widgets 
+        self.e1.grid(row = 1, column = 2, pady = 10) 
+        self.e2.grid(row = 2, column = 2, pady = 4) 
+        self.e3.grid(row = 3, column = 2, pady = 4) 
+        self.e4.grid(row = 4, column = 2, pady = 4) 
+        self.e5.grid(row = 5, column = 2, pady = 4) 
+
+       
+        # Button() function is used to create button widgets
+        cancelBtn = Button(itemWindow,text="Cancel",width=10, command = itemWindow.destroy)
+        cancelBtn.grid(column=2,row=6,pady="10",padx=10)
+        
+        saveBtn = Button(itemWindow,text="Save", width=10,command=lambda : self.saveProduct(item,itemWindow))
+        saveBtn.grid(column=1,row=6,pady="10",padx=10)
 
 
-    mainloop()     
+        mainloop()     
+        
+        
+    def saveProduct(self,item : Product,itemWindow : Toplevel):    
+        products = Products()
+        if (item == None):
+            item = Product(0,self.e1.get(),0,self.e2.get(),self.e3.get(),self.e4.get(),self.e5.get())
+            products.add(item)
+        else:
+            item.name = self.e1.get()
+            item.category_name = self.e2.get()
+            item.price = self.e3.get()
+            item.available_quantity = self.e4.get()
+            item.warning_quantity = self.e5.get()
+            products.update(item)
+            
+        itemWindow.destroy()
+        self.prodWindow.destroy()
+        self.showProducts()
     
-    
-def saveProduct(itemWindow : Toplevel):    
-    itemWindow.destroy()
-    
-main()
+
+# Start    
+admin_management()    
+
 
 
     

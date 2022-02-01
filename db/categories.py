@@ -1,3 +1,4 @@
+# Currently Not used 
 import sqlite3
 from db.category import Category
 from db.db import Db

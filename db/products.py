@@ -1,4 +1,5 @@
-import sqlite3
+# Class to manage products 
+
 from db.product import Product
 from db.db import Db
 class Products:
@@ -6,10 +7,17 @@ class Products:
     def add(self, item : Product): 
         db = Db()
         cur = db.getCursor()
-        cur.execute("INSERT INTO products (name, category_id, category_name,price, available_quantity, warning_quantity) VALUES (?,?,?,?,?)",
-                    (item.id, item.name, item.category_id, item.category_name, item.price, item.available_quantity, item.warning_quantity))
+        cur.execute("INSERT INTO products (name, category_id, category_name,price, available_quantity, warning_quantity) VALUES (?,?,?,?,?,?)",
+                    (item.name, item.category_id, item.category_name, item.price, item.available_quantity, item.warning_quantity))
         db.close()
 
+    def update(self, item : Product): 
+        db = Db()
+        cur = db.getCursor()
+        cur.execute("UPDATE products set name = ?, category_id = ?, category_name = ?,price = ?, available_quantity = ?, warning_quantity = ? WHERE id = ?",
+                    (item.name, item.category_id, item.category_name, item.price, item.available_quantity, item.warning_quantity,item.id))
+        db.close()
+        
     def get(self,id):
         db = Db()
         cur = db.getCursor()

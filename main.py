@@ -1,3 +1,5 @@
+# Main customer store 
+
 import tkinter as tk
 from tkinter.font import Font
 from tkinter import *  
