@@ -9,3 +9,6 @@ It uses tkinter for GUI and sqlite for database
 ## admin.py 
     The main file for administration
         
+
+## Credits
+Some code for cart are taken from https://github.com/ahmedzaher/Shopping-Cart
